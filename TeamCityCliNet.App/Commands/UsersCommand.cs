@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CliFx;
 using CliFx.Attributes;
@@ -24,27 +25,23 @@ namespace TeamCityCliNet.Commands
 
         public async ValueTask ExecuteAsync(IConsole console)
         {
+            var printer = new Printer(console);
+
             if (!String.IsNullOrEmpty(Username))
             {
                 var user = await _teamCity.Users.ByUsername(Username).ConfigureAwait(false);
-                PrintUser(user, console);
+                printer.PrintAsItem(user, "Id", "Username", "Name", "Email");
             } 
             else if(!String.IsNullOrEmpty(Id))
             {
                 var user = await _teamCity.Users.ById(Id).ConfigureAwait(false);
-                PrintUser(user, console);
+                printer.PrintAsItem(user, "Id", "Username", "Name", "Email");
             } 
             else 
             {
-                var users = _teamCity.Users.All();
-                await foreach (var user in users)
-                    PrintUser(user, console);
+                var users = await _teamCity.Users.All().ToListAsync();
+                printer.PrintAsList(users, "Id", "Username");
             }
-        }
-
-        private void PrintUser(IUser user, IConsole console)
-        {
-            console.Output.WriteLine($"{user.Id} {user.Username} {user.Name} ({user.Email})");
         }
     }
 }
