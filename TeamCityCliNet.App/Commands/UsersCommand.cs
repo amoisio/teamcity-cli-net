@@ -8,39 +8,39 @@ using TeamCityRestClientNet.Api;
 namespace TeamCityCliNet.Commands
 {
     [Command("users")]
-    public class UsersCommand: ICommand
+    public class UsersCommand : TeamCityCommand
     {
-        private readonly TeamCity _teamCity;
-
-        public UsersCommand(TeamCity teamCity)
-        {
-            _teamCity = teamCity;
-        }
+        public UsersCommand(TeamCity teamCity) : base(teamCity) { }
 
         [CommandOption("username",'u', Description = "Username of the user to find.")]
         public string Username { get; set; }
 
-        [CommandOption("id", Description = "Id of the user to find.")]
-        public string Id { get; set; }
-
-        public async ValueTask ExecuteAsync(IConsole console)
+        private string[] EffectiveFields
         {
-            var printer = new Printer(console);
+            get{
+                if (Fields != null && Fields.Length > 0)
+                    return Fields;
+                else
+                    return new string[] {"Id", "Username", "Name", "Email" };
+            }
+        }
 
+        protected override async ValueTask Execute(TeamCity teamCity, Printer printer)
+        {
             if (!String.IsNullOrEmpty(Username))
             {
-                var user = await _teamCity.Users.ByUsername(Username).ConfigureAwait(false);
-                printer.PrintAsItem(user, "Id", "Username", "Name", "Email");
-            } 
-            else if(!String.IsNullOrEmpty(Id))
+                var user = await teamCity.Users.ByUsername(Username).ConfigureAwait(false);
+                printer.PrintAsItem(user, EffectiveFields);
+            }
+            else if (!String.IsNullOrEmpty(Id))
             {
-                var user = await _teamCity.Users.ById(Id).ConfigureAwait(false);
-                printer.PrintAsItem(user, "Id", "Username", "Name", "Email");
-            } 
-            else 
+                var user = await teamCity.Users.ById(Id).ConfigureAwait(false);
+                printer.PrintAsItem(user, EffectiveFields);
+            }
+            else
             {
-                var users = await _teamCity.Users.All().ToListAsync();
-                printer.PrintAsList(users, "Id", "Username");
+                var users = await teamCity.Users.All().ToListAsync();
+                printer.PrintAsList(users, EffectiveFields);
             }
         }
     }
