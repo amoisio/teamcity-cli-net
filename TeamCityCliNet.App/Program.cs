@@ -22,6 +22,7 @@ namespace TeamCityCliNet.App
 
             // Commands
             services.AddTransient<UsersCommand>();
+            services.AddTransient<UserFieldsCommand>();
 
             var serviceProvider = services.BuildServiceProvider();
             var returnCode = await new CliApplicationBuilder()

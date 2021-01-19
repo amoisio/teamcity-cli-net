@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using CliFx;
 using CliFx.Attributes;
 using TeamCityRestClientNet.Api;
 
@@ -36,4 +35,7 @@ namespace TeamCityCliNet.Commands
             }
         }
     }
+
+    [Command("users fields")]
+    public class UserFieldsCommand : FieldsCommand<IUser> { }
 }
