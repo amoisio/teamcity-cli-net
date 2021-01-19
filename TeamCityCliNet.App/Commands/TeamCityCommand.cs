@@ -18,8 +18,18 @@ namespace TeamCityCliNet.Commands
         [CommandOption("id", Description = "Id of the entity to find.")]
         public string Id { get; set; }
 
+        private string[] _fields;
+
         [CommandOption("fields", 'f', Description = "Fields to display.")]
-        public string[] Fields { get; set; }
+        public string[] Fields
+        {
+            get => (_fields == null || _fields.Length == 0)
+                ? DefaultFields
+                : _fields;
+            set => _fields = value;
+        }
+
+        public abstract string[] DefaultFields { get; }
 
         public async ValueTask ExecuteAsync(IConsole console)
         {
