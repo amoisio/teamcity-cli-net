@@ -9,10 +9,12 @@ namespace TeamCityCliNet
     public class Printer
     {
         private readonly IConsole _console;
+        private readonly int? _count;
 
-        public Printer(IConsole console)
+        public Printer(IConsole console, int? count)
         {
             _console = console;
+            _count = count;
         }
 
         public void PrintAsList<T>(IEnumerable<T> items, params string[] fields)
@@ -45,6 +47,9 @@ namespace TeamCityCliNet
 
         private void PrintListRows<T>(IEnumerable<T> items, PropertyInfo[] props)
         {
+            if (_count.HasValue)
+                items = items.Take(_count.Value);
+
             foreach (var item in items)
             {
                 var values = props.Select(prop => prop.GetValue(item)?.ToString()).ToArray();

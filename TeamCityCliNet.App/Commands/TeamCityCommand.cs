@@ -29,11 +29,14 @@ namespace TeamCityCliNet.Commands
             set => _fields = value;
         }
 
+        [CommandOption("count", 'c', Description = "Number of items to display.")]
+        public int? Count { get; set; }
+
         public abstract string[] DefaultFields { get; }
 
         public async ValueTask ExecuteAsync(IConsole console)
         {
-            var printer = new Printer(console);
+            var printer = new Printer(console, Count);
             await Execute(_teamCity, printer).ConfigureAwait(false);
         }
 
