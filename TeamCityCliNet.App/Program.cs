@@ -21,6 +21,8 @@ namespace TeamCityCliNet.App
             services.AddScoped<TeamCity>(provider => BuildTeamCity());
 
             // Commands
+            services.AddTransient<AgentPoolsCommand>();
+            services.AddTransient<AgentPoolFieldsCommand>();
             services.AddTransient<UsersCommand>();
             services.AddTransient<UserFieldsCommand>();
             services.AddTransient<VcsRootsCommand>();
