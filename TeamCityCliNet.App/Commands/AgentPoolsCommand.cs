@@ -19,7 +19,7 @@ namespace TeamCityCliNet.Commands
             if (!String.IsNullOrEmpty(Id))
             {
                 var pool = await teamCity.BuildAgentPools.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, pool, Fields);
+                ItemPrinter.Print(console, pool);
             }
             else
             {

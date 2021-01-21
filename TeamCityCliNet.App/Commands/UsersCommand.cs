@@ -22,12 +22,12 @@ namespace TeamCityCliNet.Commands
             if (!String.IsNullOrEmpty(Username))
             {
                 var user = await teamCity.Users.ByUsername(Username).ConfigureAwait(false);
-                ItemPrinter.Print(console, user, Fields);
+                ItemPrinter.Print(console, user);
             }
             else if (!String.IsNullOrEmpty(Id))
             {
                 var user = await teamCity.Users.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, user, Fields);
+                ItemPrinter.Print(console, user);
             }
             else
             {

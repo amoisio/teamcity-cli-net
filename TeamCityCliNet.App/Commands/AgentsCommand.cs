@@ -19,7 +19,7 @@ namespace TeamCityCliNet.Commands
             if (!String.IsNullOrEmpty(Id))
             {
                 var agent = await teamCity.BuildAgents.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, agent, Fields);
+                ItemPrinter.Print(console, agent);
             }
             else
             {

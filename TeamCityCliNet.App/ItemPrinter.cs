@@ -8,7 +8,7 @@ namespace TeamCityCliNet
 {
     public static class ItemPrinter
     {
-        public static void Print<T>(IConsole console, T item, string[] fields)
+        public static void Print<T>(IConsole console, T item, string[] fields = null)
         {
             var properties = PrintableProperties<T>(fields);
             var data = ExtractData(item, properties);
@@ -32,7 +32,19 @@ namespace TeamCityCliNet
             }
             else
             {
-                props.AddRange(allProps);
+                var idProp = allProps.FirstOrDefault(prop => 
+                    String.Equals("id", prop.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (idProp != null)
+                    props.Add(idProp);
+
+                var nameProp = allProps.FirstOrDefault(prop =>
+                    String.Equals("name", prop.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (nameProp != null)
+                    props.Add(nameProp);
+
+                props.AddRange(allProps.Where(prop =>
+                    !String.Equals("id", prop.Name, StringComparison.InvariantCultureIgnoreCase)
+                    && !String.Equals("name", prop.Name, StringComparison.InvariantCultureIgnoreCase)));
             }
             return props.ToArray();
         }
@@ -83,7 +95,7 @@ namespace TeamCityCliNet
 
         private static void DrawItem(IConsole console, string[][] data, int size)
         {
-            int nrows = data.Length;
+            int nrows = data[0].Length;
             for (int i = 0; i < nrows; i++)
             {
                 string pattern = $"{{0, -{size}}} : {{1}}";

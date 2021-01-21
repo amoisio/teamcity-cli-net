@@ -19,7 +19,7 @@ namespace TeamCityCliNet.Commands
             if (!String.IsNullOrEmpty(Id))
             {
                 var root = await teamCity.VcsRoots.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, root, Fields);
+                ItemPrinter.Print(console, root);
             }
             else
             {
