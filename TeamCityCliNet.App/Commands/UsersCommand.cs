@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CliFx;
 using CliFx.Attributes;
 using TeamCityRestClientNet.Api;
 
@@ -16,22 +17,22 @@ namespace TeamCityCliNet.Commands
 
         public override string[] DefaultFields => new string[] {"Id", "Username", "Name", "Email" };
 
-        protected override async ValueTask Execute(TeamCity teamCity, Printer printer)
+        protected override async ValueTask Execute(IConsole console, TeamCity teamCity)
         {
             if (!String.IsNullOrEmpty(Username))
             {
                 var user = await teamCity.Users.ByUsername(Username).ConfigureAwait(false);
-                printer.PrintAsItem(user, Fields);
+                ItemPrinter.Print(console, user, Fields);
             }
             else if (!String.IsNullOrEmpty(Id))
             {
                 var user = await teamCity.Users.ById(Id).ConfigureAwait(false);
-                printer.PrintAsItem(user, Fields);
+                ItemPrinter.Print(console, user, Fields);
             }
             else
             {
-                var users = await teamCity.Users.All().ToListAsync();
-                printer.PrintAsList(users, Fields);
+                var users = await teamCity.Users.All().ToArrayAsync();
+                TablePrinter.Print(console, users, Fields, Count);
             }
         }
     }

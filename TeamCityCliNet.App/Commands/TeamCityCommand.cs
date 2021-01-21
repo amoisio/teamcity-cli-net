@@ -36,10 +36,9 @@ namespace TeamCityCliNet.Commands
 
         public async ValueTask ExecuteAsync(IConsole console)
         {
-            var printer = new Printer(console, Count);
-            await Execute(_teamCity, printer).ConfigureAwait(false);
+            await Execute(console, _teamCity).ConfigureAwait(false);
         }
 
-        protected abstract ValueTask Execute(TeamCity teamCity, Printer printer);
+        protected abstract ValueTask Execute(IConsole console, TeamCity teamCity);
     }
 }
