@@ -25,6 +25,8 @@ namespace TeamCityCliNet.App
             services.AddTransient<AgentFieldsCommand>();
             services.AddTransient<AgentPoolsCommand>();
             services.AddTransient<AgentPoolFieldsCommand>();
+            services.AddTransient<BuildQueueCommand>();
+            services.AddTransient<BuildQueueFieldsCommand>();
             services.AddTransient<BuildTypesCommand>();
             services.AddTransient<BuildTypeFieldsCommand>();
             services.AddTransient<ChangesCommand>();
