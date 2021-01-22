@@ -12,15 +12,15 @@ namespace TeamCityCliNet.Commands
     {
         public BuildQueueCommand(TeamCity teamCity) : base(teamCity) { }
 
+        [CommandOption("id", Description = "Id of project whose builds to list.")]
+        public override string Id { get; set; }
+
         public override string[] DefaultFields => new string[] { "Id", "BuildTypeId", "Name" };
 
         protected override async ValueTask Execute(IConsole console, TeamCity teamCity)
         {
-            var items = await teamCity.BuildQueue.All().ToArrayAsync();
-            if (!String.IsNullOrEmpty(Id))
-            {
-                items = items.Where(i => Id.Equals(i.Id.StringId, StringComparison.InvariantCultureIgnoreCase)).ToArray();
-            }
+            Id? projectId = !String.IsNullOrEmpty(Id) ? new Id(Id) : null;
+            var items = await teamCity.BuildQueue.All(projectId).ToArrayAsync();
             TablePrinter.Print(console, items, Fields, Count);
         }        
     }

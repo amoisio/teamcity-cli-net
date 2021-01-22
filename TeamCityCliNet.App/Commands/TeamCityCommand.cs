@@ -16,7 +16,7 @@ namespace TeamCityCliNet.Commands
         }
 
         [CommandOption("id", Description = "Id of the entity to find.")]
-        public string Id { get; set; }
+        public virtual string Id { get; set; }
 
         private string[] _fields;
 
