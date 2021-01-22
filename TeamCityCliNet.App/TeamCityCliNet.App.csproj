@@ -18,11 +18,7 @@
   <ItemGroup>
     <PackageReference Include="CliFx" Version="1.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="TeamCityRestClient.NET" Version="1.0.3" />
-    <!-- <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
-    <PackageReference Include="refit" Version="5.2.4" />
-    <PackageReference Include="System.Linq.Async" Version="5.0.0" /> -->
+    <PackageReference Include="TeamCityRestClient.NET" Version="1.0.4" />
   </ItemGroup>
   <Target Name="Rename" AfterTargets="AfterBuild">
     <Move SourceFiles="$(OUTDIR)\TeamCityCliNet.App" DestinationFiles="$(OUTDIR)\tc" />
