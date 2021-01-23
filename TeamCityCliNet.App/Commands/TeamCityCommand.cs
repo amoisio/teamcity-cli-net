@@ -30,7 +30,7 @@ namespace TeamCityCliNet.Commands
         }
 
         [CommandOption("count", 'c', Description = "Number of items to display.")]
-        public int? Count { get; set; }
+        public virtual int? Count { get; set; }
 
         public abstract string[] DefaultFields { get; }
 

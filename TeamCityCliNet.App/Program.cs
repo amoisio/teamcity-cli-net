@@ -22,18 +22,20 @@ namespace TeamCityCliNet.App
 
             // Commands
             services.AddTransient<AgentsCommand>();
-            services.AddTransient<AgentFieldsCommand>();
             services.AddTransient<AgentPoolsCommand>();
-            services.AddTransient<AgentPoolFieldsCommand>();
+            services.AddTransient<BuildsCommand>();
             services.AddTransient<BuildQueueCommand>();
-            services.AddTransient<BuildQueueFieldsCommand>();
             services.AddTransient<BuildTypesCommand>();
-            services.AddTransient<BuildTypeFieldsCommand>();
             services.AddTransient<ChangesCommand>();
-            services.AddTransient<ChangeFieldsCommand>();
             services.AddTransient<UsersCommand>();
-            services.AddTransient<UserFieldsCommand>();
             services.AddTransient<VcsRootsCommand>();
+            services.AddTransient<AgentFieldsCommand>();
+            services.AddTransient<AgentPoolFieldsCommand>();
+            services.AddTransient<BuildFieldsCommand>();
+            services.AddTransient<BuildQueueFieldsCommand>();
+            services.AddTransient<BuildTypeFieldsCommand>();
+            services.AddTransient<ChangeFieldsCommand>();
+            services.AddTransient<UserFieldsCommand>();
             services.AddTransient<VcsRootFieldsCommand>();
 
             var serviceProvider = services.BuildServiceProvider();
