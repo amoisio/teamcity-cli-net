@@ -7,10 +7,10 @@ using TeamCityRestClientNet.Api;
 
 namespace TeamCityCliNet.Commands
 {
-    [Command("buildTypes")]
-    public class BuildTypesCommand : TeamCityCommand
+    [Command("configurations")]
+    public class BuildConfigurationsCommand : TeamCityCommand
     {
-        public BuildTypesCommand(TeamCity teamCity) : base(teamCity) { }
+        public BuildConfigurationsCommand(TeamCity teamCity) : base(teamCity) { }
 
         public override string[] DefaultFields => new string[] {"Id", "Name", "ProjectId", "ProjectName" };
 
@@ -29,6 +29,6 @@ namespace TeamCityCliNet.Commands
         }
     }
 
-    [Command("buildTypes fields")]
-    public class BuildTypeFieldsCommand : FieldsCommand<IBuildType> { }
+    [Command("configurations fields")]
+    public class BuildConfigurationFieldsCommand : FieldsCommand<IBuildType> { }
 }
