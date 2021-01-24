@@ -25,7 +25,7 @@ namespace TeamCityCliNet.Commands
         [CommandOption("number", 'n', Description = "")]
         public string Number { get; set; }
 
-        [CommandOption("personal", 'p', Description = "")]
+        [CommandOption("personal", Description = "")]
         public bool? Personal { get; set; }
 
         [CommandOption("branch", 'b', Description = "")]
