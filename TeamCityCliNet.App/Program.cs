@@ -33,6 +33,9 @@ namespace TeamCityCliNet.App
             services.AddTransient<BuildConfigurationFieldsCommand>();
             services.AddTransient<ChangesCommand>();
             services.AddTransient<ChangeFieldsCommand>();
+            services.AddTransient<ProjectsCommand>();
+            services.AddTransient<ProjectDeleteCommand>();
+            services.AddTransient<ProjectFieldsCommand>();
             services.AddTransient<RunCommand>();
             services.AddTransient<UsersCommand>();
             services.AddTransient<UserFieldsCommand>();
