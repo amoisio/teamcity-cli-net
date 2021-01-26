@@ -21,10 +21,12 @@ namespace TeamCityCliNet.App
             services.AddScoped<TeamCity>(provider => BuildTeamCity());
 
             // Commands
-            services.AddTransient<AgentsCommand>();
-            services.AddTransient<AgentsEnableCommand>();
-            services.AddTransient<AgentsDisableCommand>();
-            services.AddTransient<AgentsFieldsCommand>();
+            services.AddTransient<AgentShowCommand>();
+            services.AddTransient<AgentEnableCommand>();
+            services.AddTransient<AgentDisableCommand>();
+            services.AddTransient<AgentListCommand>();
+            services.AddTransient<AgentFieldsCommand>();
+
             services.AddTransient<AgentPoolsCommand>();
             services.AddTransient<AgentPoolFieldsCommand>();
             services.AddTransient<BuildsCommand>();
