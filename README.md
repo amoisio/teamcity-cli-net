@@ -55,3 +55,9 @@ I wonder if I could make commands history aware so I could do something like thi
 1. ./tc projects | ./tc project --id --
 
 The second line would look up the entity (projects in this case), and the id of the first rows, and then query 
+
+every command stores results in a command specific cache on file
+- ./tc users -> users.json
+- ./tc <cmd> --redo -> replay last cmd results from cache
+- ./tc <cmd> --id $n.Id -> read n-1 th row from cache and use its Id column value as an input for the message
+

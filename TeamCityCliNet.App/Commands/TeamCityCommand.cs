@@ -28,11 +28,10 @@ namespace TeamCityCliNet.Commands
                 : _fields;
             set => _fields = value;
         }
+        public abstract string[] DefaultFields { get; }
 
         [CommandOption("count", 'c', Description = "Number of items to display.")]
         public virtual int? Count { get; set; }
-
-        public abstract string[] DefaultFields { get; }
 
         public async ValueTask ExecuteAsync(IConsole console)
         {
