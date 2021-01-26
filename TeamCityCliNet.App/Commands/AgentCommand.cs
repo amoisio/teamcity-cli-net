@@ -8,7 +8,7 @@ using TeamCityRestClientNet.Api;
 
 namespace TeamCityCliNet.Commands
 {
-    [Command("agent show")]
+    [Command("agent")]
     public class AgentShowCommand : TeamCityItemCommand<IBuildAgent>
     {
         public AgentShowCommand(TeamCity teamCity) : base(teamCity) { }
