@@ -22,7 +22,9 @@ namespace TeamCityCliNet.App
 
             // Commands
             services.AddTransient<AgentsCommand>();
-            services.AddTransient<AgentFieldsCommand>();
+            services.AddTransient<AgentsEnableCommand>();
+            services.AddTransient<AgentsDisableCommand>();
+            services.AddTransient<AgentsFieldsCommand>();
             services.AddTransient<AgentPoolsCommand>();
             services.AddTransient<AgentPoolFieldsCommand>();
             services.AddTransient<BuildsCommand>();
