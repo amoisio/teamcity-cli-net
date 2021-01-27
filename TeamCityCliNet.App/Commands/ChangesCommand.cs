@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CliFx;
@@ -7,40 +7,49 @@ using TeamCityRestClientNet.Api;
 
 namespace TeamCityCliNet.Commands
 {
-    [Command("changes")]
-    public class ChangesCommand : TeamCityCommand
+    [Command("change")]
+    public class ChangeCommand : TeamCityItemCommand<IChange>
     {
-        public ChangesCommand(TeamCity teamCity) : base(teamCity) { }
+        public ChangeCommand(TeamCity teamCity) : base(teamCity) { }
 
-        [CommandOption("type", 't', Description = "Build type id.")]
+        protected override async Task<IChange> Execute(IConsole console, TeamCity teamCity)
+            => await teamCity.Changes.ById(Id).ConfigureAwait(false);
+    }
+
+    [Command("change type")]
+    public class ChangeTypeCommand : ICommand
+    {
+        private readonly TeamCity _teamCity;
+
+        public ChangeTypeCommand(TeamCity teamCity) 
+        { 
+            _teamCity = teamCity;
+        }
+
+        [CommandParameter(0, Name = "type", Description = "Build type id.")]
         public string BuildTypeId { get; set; }
 
-
-        [CommandOption("version", 'v', Description = "Version.")]
+        [CommandParameter(1, Name = "version", Description = "Version.")]
         public string Version { get; set; }
 
-        public override string[] DefaultFields => new string[] {"Id", "Version", "Username", "Date" };
-
-        protected override async ValueTask Execute(IConsole console, TeamCity teamCity)
+        public async ValueTask ExecuteAsync(IConsole console)
         {
-            if (!String.IsNullOrEmpty(Id))
-            {
-                var change = await teamCity.Changes.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, change);
-            }
-            else if (!String.IsNullOrEmpty(BuildTypeId) || !String.IsNullOrEmpty(Version))
-            {
-                var change = await teamCity.Changes.ByBuildTypeId(new Id(BuildTypeId), Version).ConfigureAwait(false);
-                ItemPrinter.Print(console, change);
-            }
-            else
-            {
-                var changes = await teamCity.Changes.All().ToArrayAsync();
-                TablePrinter.Print(console, changes, Fields, Count);
-            }
+            var item = await _teamCity.Changes.ByBuildTypeId(new Id(BuildTypeId), Version).ConfigureAwait(false);
+            ItemPrinter.Print(console, item);
         }
     }
 
-    [Command("changes fields")]
+    [Command("change list")]
+    public class ChangeListCommand : TeamCityListCommand<IChange>
+    {
+        public ChangeListCommand(TeamCity teamCity) : base(teamCity) { }
+
+        public override string[] DefaultFields => new string[] {"Id", "Version", "Username", "Date" };
+
+        protected override async Task<IEnumerable<IChange>> Execute(IConsole console, TeamCity teamCity)
+            => await teamCity.Changes.All().ToArrayAsync().ConfigureAwait(false);
+    }
+
+    [Command("change fields")]
     public class ChangeFieldsCommand : FieldsCommand<IChange> { }
 }
