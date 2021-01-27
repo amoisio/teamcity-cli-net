@@ -31,8 +31,11 @@ namespace TeamCityCliNet.App
             services.AddTransient<AgentPoolListCommand>();
             services.AddTransient<AgentPoolFieldsCommand>();
 
-            services.AddTransient<BuildsCommand>();
+            services.AddTransient<BuildCommand>();
+            services.AddTransient<BuildLatestCommand>();
+            services.AddTransient<BuildListCommand>();
             services.AddTransient<BuildFieldsCommand>();
+
             services.AddTransient<BuildQueueCommand>();
             services.AddTransient<BuildQueueFieldsCommand>();
             services.AddTransient<BuildConfigurationsCommand>();

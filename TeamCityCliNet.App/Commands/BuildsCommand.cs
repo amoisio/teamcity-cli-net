@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CliFx;
@@ -7,18 +8,38 @@ using TeamCityRestClientNet.Api;
 
 namespace TeamCityCliNet.Commands
 {
-    [Command("builds")]
-    public class BuildsCommand : TeamCityCommand
+    [Command("build")]
+    public class BuildCommand : TeamCityItemCommand<IBuild>
     {
-        public BuildsCommand(TeamCity teamCity) : base(teamCity) { }
+        public BuildCommand(TeamCity teamCity) : base(teamCity) { }
+
+        protected override async Task<IBuild> Execute(IConsole console, TeamCity teamCity)
+            => await teamCity.Builds.ById(Id).ConfigureAwait(false);
+    }
+
+    [Command("build latest")]
+    public class BuildLatestCommand : ICommand
+    {
+        private readonly TeamCity _teamCity;
+
+        public BuildLatestCommand(TeamCity teamCity) 
+        { 
+            _teamCity = teamCity;
+        }
+
+        public async ValueTask ExecuteAsync(IConsole console)
+        {
+            var item = await _teamCity.Builds.Latest().ConfigureAwait(false);
+            ItemPrinter.Print(console, item);
+        }
+    }
+
+    [Command("build list")]
+    public class BuildListCommand : TeamCityListCommand<IBuild>
+    {
+        public BuildListCommand(TeamCity teamCity) : base(teamCity) { }
 
         public override string[] DefaultFields => new string[] {"Id", "BuildTypeId", "BuildNumber", "BranchName", "Status", "State" };
-
-        [CommandOption("count", 'c', Description = "")]
-        public override int? Count { get; set; } = 30;
-
-        [CommandOption("latest", Description = "Gets the latest build.")]
-        public bool Latest { get; set; }
 
         [CommandOption("type", Description = "")]
         public string BuildType { get; set; }
@@ -76,48 +97,33 @@ namespace TeamCityCliNet.Commands
 
         [CommandOption("status", Description = "")]
         public BuildStatus? Status { get; set; }
-        protected override async ValueTask Execute(IConsole console, TeamCity teamCity)
+        protected override async Task<IEnumerable<IBuild>> Execute(IConsole console, TeamCity teamCity)
         {
-            if (!String.IsNullOrEmpty(Id))
-            {
-                var item = await teamCity.Builds.ById(Id).ConfigureAwait(false);
-                ItemPrinter.Print(console, item);
-            }
-            else if (Latest)
-            {
-                var item = await teamCity.Builds.Latest().ConfigureAwait(false);
-                ItemPrinter.Print(console, item);
-            }
-            else 
-            {
-                var locator = teamCity.Builds;
-                if (!String.IsNullOrEmpty(BuildType))   locator.FromBuildType(new Id(BuildType));
-                if (!String.IsNullOrEmpty(Snapshot))    locator.SnapshotDependencyTo(new Id(Snapshot));
-                if (!String.IsNullOrEmpty(Branch))      locator.WithBranch(Branch);
-                if (!String.IsNullOrEmpty(Number))      locator.WithNumber(Number);
-                if (!String.IsNullOrEmpty(Tag))         locator.WithTag(Tag);
-                if (!String.IsNullOrEmpty(Revision))    locator.WithVcsRevision(Revision);
-                if (IncludeCanceled)    locator.IncludeCanceled();
-                if (IncludeFailed)      locator.IncludeFailed();
-                if (IncludePersonal)    locator.IncludePersonal();
-                if (IncludeRunning)     locator.IncludeRunning();
-                if (OnlyCanceled)       locator.OnlyCanceled();
-                if (OnlyPersonal)       locator.OnlyPersonal();
-                if (OnlyRunning)        locator.OnlyRunning();
-                if (OnlyPinned)         locator.PinnedOnly();
-                if (PageSize.HasValue)  locator.PageSize(PageSize.Value);
-                if (Since.HasValue)     locator.Since(Since.Value);
-                if (Until.HasValue)     locator.Until(Until.Value);
-                if (AllBranches)        locator.WithAllBranches();
-                if (Status.HasValue)    locator.WithStatus(Status.Value);
-                if (Count.HasValue)     locator.LimitResults(Count.Value);
+            var locator = teamCity.Builds;
+            if (!String.IsNullOrEmpty(BuildType)) locator.FromBuildType(new Id(BuildType));
+            if (!String.IsNullOrEmpty(Snapshot)) locator.SnapshotDependencyTo(new Id(Snapshot));
+            if (!String.IsNullOrEmpty(Branch)) locator.WithBranch(Branch);
+            if (!String.IsNullOrEmpty(Number)) locator.WithNumber(Number);
+            if (!String.IsNullOrEmpty(Tag)) locator.WithTag(Tag);
+            if (!String.IsNullOrEmpty(Revision)) locator.WithVcsRevision(Revision);
+            if (IncludeCanceled) locator.IncludeCanceled();
+            if (IncludeFailed) locator.IncludeFailed();
+            if (IncludePersonal) locator.IncludePersonal();
+            if (IncludeRunning) locator.IncludeRunning();
+            if (OnlyCanceled) locator.OnlyCanceled();
+            if (OnlyPersonal) locator.OnlyPersonal();
+            if (OnlyRunning) locator.OnlyRunning();
+            if (OnlyPinned) locator.PinnedOnly();
+            if (PageSize.HasValue) locator.PageSize(PageSize.Value);
+            if (Since.HasValue) locator.Since(Since.Value);
+            if (Until.HasValue) locator.Until(Until.Value);
+            if (AllBranches) locator.WithAllBranches();
+            if (Status.HasValue) locator.WithStatus(Status.Value);
+            locator.LimitResults(Count);
 
-                var items = await teamCity.Builds.All().ToArrayAsync().ConfigureAwait(false);
-                TablePrinter.Print(console, items, Fields, Count);
-            }
-        }
+            return await teamCity.Builds.All().ToArrayAsync().ConfigureAwait(false);        }
     }
 
-    [Command("builds fields")]
+    [Command("build fields")]
     public class BuildFieldsCommand : FieldsCommand<IBuild> { }
 }
