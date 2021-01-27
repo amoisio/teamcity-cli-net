@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CliFx;
@@ -8,20 +9,17 @@ using TeamCityRestClientNet.Api;
 namespace TeamCityCliNet.Commands
 {
     [Command("queue")]
-    public class BuildQueueCommand : TeamCityCommand
+    public class BuildQueueCommand : TeamCityListCommand<IBuild>
     {
         public BuildQueueCommand(TeamCity teamCity) : base(teamCity) { }
 
-        [CommandOption("id", Description = "Id of project whose builds to list.")]
-        public override string Id { get; set; }
-
+        [CommandOption("projectId", Description = "Id of project whose builds to list.")]
+        public string ProjectId { get; set; }
         public override string[] DefaultFields => new string[] { "Id", "BuildTypeId", "Name" };
-
-        protected override async ValueTask Execute(IConsole console, TeamCity teamCity)
+        protected override async Task<IEnumerable<IBuild>> Execute(IConsole console, TeamCity teamCity)
         {
-            Id? projectId = !String.IsNullOrEmpty(Id) ? new Id(Id) : null;
-            var items = await teamCity.BuildQueue.All(projectId).ToArrayAsync();
-            TablePrinter.Print(console, items, Fields, Count);
+            Id? projectId = !String.IsNullOrEmpty(ProjectId) ? new Id(ProjectId) : null;
+            return await teamCity.BuildQueue.All(projectId).ToArrayAsync().ConfigureAwait(false);
         }        
     }
 
