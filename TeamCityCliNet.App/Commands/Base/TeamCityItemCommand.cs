@@ -13,7 +13,7 @@ namespace TeamCityCliNet.Commands
             _teamCity = teamCity;
         }
 
-        [CommandParameter(0, Name="Id", Description = "TeamCity identifier.")]
+        [CommandParameter(0, Name="Id")]
         public virtual string IdString { get; set; }
         public Id Id => new Id(IdString);
 

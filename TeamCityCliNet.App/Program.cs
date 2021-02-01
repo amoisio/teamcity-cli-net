@@ -47,11 +47,14 @@ namespace TeamCityCliNet.App
             services.AddTransient<ChangeTypeCommand>();
             services.AddTransient<ChangeListCommand>();
             services.AddTransient<ChangeFieldsCommand>();
-            
-            services.AddTransient<ProjectsCommand>();
+
+            services.AddTransient<ProjectCommand>();
+            services.AddTransient<ProjectListCommand>();
             services.AddTransient<ProjectDeleteCommand>();
             services.AddTransient<ProjectFieldsCommand>();
+
             services.AddTransient<RunCommand>();
+            
             services.AddTransient<UsersCommand>();
             services.AddTransient<UserFieldsCommand>();
             services.AddTransient<VcsRootsCommand>();
