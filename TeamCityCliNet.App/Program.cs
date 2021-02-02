@@ -55,8 +55,10 @@ namespace TeamCityCliNet.App
 
             services.AddTransient<RunCommand>();
             
-            services.AddTransient<UsersCommand>();
+            services.AddTransient<UserCommand>();
+            services.AddTransient<UserListCommand>();
             services.AddTransient<UserFieldsCommand>();
+
             services.AddTransient<VcsRootsCommand>();
             services.AddTransient<VcsRootFieldsCommand>();
 
