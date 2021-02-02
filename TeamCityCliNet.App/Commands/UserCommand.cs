@@ -18,7 +18,7 @@ namespace TeamCityCliNet.Commands
             {
                 return await teamCity.Users.ById(Id).ConfigureAwait(false);
             }
-            catch (Refit.ApiException e)
+            catch (Refit.ApiException)
             {
                 return await teamCity.Users.ByUsername(IdString).ConfigureAwait(false);
             }
