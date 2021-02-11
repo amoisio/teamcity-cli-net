@@ -15,7 +15,7 @@ namespace TeamCityCliNet.Commands
 
         [CommandParameter(0, Name="Id")]
         public virtual string IdString { get; set; }
-        public Id Id => new Id(IdString);
+        public Id Id => new(IdString);
 
         public async ValueTask ExecuteAsync(IConsole console)
         {

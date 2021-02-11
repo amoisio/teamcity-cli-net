@@ -77,7 +77,7 @@ namespace TeamCityCliNet.Commands
             }
         }
 
-        private IDictionary<string, string> ParseParameters(string[] values)
+        private static IDictionary<string, string> ParseParameters(string[] values)
         {
             if (values == null || values.Length == 0)
                 return null;
