@@ -28,6 +28,19 @@ namespace TeamCityCliNet.Commands
             => await teamCity.VcsRoots.All().ToArrayAsync().ConfigureAwait(false);
     }
 
-    [Command("vcsRoots fields")]
+    [Command("vcsRoot delete")]
+    public class VcsRootDeleteCommand : TeamCityItemCommand<IVcsRoot>
+    {
+        public VcsRootDeleteCommand(TeamCity teamCity) : base(teamCity) { }
+
+        protected override async Task<IVcsRoot> Execute(IConsole console, TeamCity teamCity)
+        {
+            var item = await teamCity.VcsRoots.ById(Id).ConfigureAwait(false);
+            await item.Delete().ConfigureAwait(false);
+            return item;
+        }
+    }
+
+    [Command("vcsRoot fields")]
     public class VcsRootFieldsCommand : FieldsCommand<IVcsRoot> { }
 }
